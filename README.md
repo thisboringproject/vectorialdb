@@ -15,7 +15,7 @@ services:
     container_name: postgres_vector_db
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: adminpassword123 # ¡Cambia esto en producción!
+      POSTGRES_PASSWORD: admin123 # ¡Cambia esto en producción!
       POSTGRES_DB: vector_database
     ports:
       - "5432:5432"
@@ -30,10 +30,10 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin_gui
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_EMAIL: boring@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8080:80"
+      - "5050:80"
     depends_on:
       - vectordb
     restart: unless-stopped
@@ -69,7 +69,7 @@ docker-compose up -d
 1. Abre tu navegador e ingresa a: `http://localhost:5050`
 2. Inicia sesión con las credenciales de pgAdmin:
 * **Email:** `boring@admin.com`
-* **Password:** `admin123`
+* **Password:** `admin`
 
 
 
