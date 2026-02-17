@@ -1,9 +1,9 @@
 
-# Configuración de Base de Datos Vectorial (Postgres + pgvector)
+## Configuración de Base de Datos Vectorial (Postgres + pgvector)
 
 Esta configuración utiliza la imagen oficial `pgvector/pgvector` para proveer capacidades de búsqueda vectorial en PostgreSQL, junto con pgAdmin4 para la gestión visual.
 
-## 1. Archivo `docker-compose.yml`
+### 1. Archivo `docker-compose.yml`
 
 Crea un archivo llamado `docker-compose.yml` con el siguiente contenido:
 
@@ -53,9 +53,9 @@ networks:
 
 ---
 
-## 2. Pasos para ponerlo en marcha
+### 2. Pasos para ponerlo en marcha
 
-### Paso 1: Levantar los servicios
+#### Paso 1: Levantar los servicios
 
 En tu terminal, navega a la carpeta donde guardaste el archivo y ejecuta:
 
@@ -64,7 +64,7 @@ docker-compose up -d
 
 ```
 
-### Paso 2: Acceder a pgAdmin
+#### Paso 2: Acceder a pgAdmin
 
 1. Abre tu navegador e ingresa a: `http://localhost:5050`
 2. Inicia sesión con las credenciales de pgAdmin:
@@ -73,7 +73,7 @@ docker-compose up -d
 
 
 
-### Paso 3: Conectar el Servidor (Paso Crítico)
+#### Paso 3: Conectar el Servidor (Paso Crítico)
 
 Dentro de pgAdmin, haz clic derecho en **Servers > Register > Server...**
 
@@ -87,7 +87,7 @@ Dentro de pgAdmin, haz clic derecho en **Servers > Register > Server...**
 
 
 
-### Paso 4: Activar la extensión y probar
+#### Paso 4: Activar la extensión y probar
 
 Aunque la imagen tiene la extensión instalada, debes activarla en tu base de datos específica.
 
@@ -116,11 +116,32 @@ SELECT * FROM items ORDER BY embedding <-> '[1,2,3]' LIMIT 5;
 
 ---
 
-## 💡 Nota de Rendimiento (Indexación)
+### 💡 Nota de Rendimiento (Indexación)
 
 Al usar ``pgvector``, recuerda que la indexación es clave para el rendimiento. Cuando tengas miles de registros, no olvides crear un índice **HNSW** (Hierarchical Navigable Small World) para búsquedas aproximadas rápidas, en lugar de escanear toda la tabla:
 
 ```sql
 CREATE INDEX ON items USING hnsw (embedding vector_l2_ops);
+
+```
+
+## Crear script de Python para conectarse a la BD vectorial
+
+Para este script, utilizaremos una librería oficial de Python llamada ``pgvector`` junto con el driver estándar psycopg2.
+
+Este script hará lo siguiente:
+
+1. Conectarse a tu contenedor de Docker.
+2. Preparar la base de datos (crear la extensión y la tabla).
+3. Generar datos sintéticos (falsos). Nota: Uso vectores aleatorios para que no necesites claves de API de OpenAI ni descargar modelos pesados solo para probar la conexión.
+4. Insertar los datos de forma eficiente.
+5. Realizar una búsqueda de prueba.
+
+### Requisitos previos
+
+Primero, necesitas instalar las librerías necesarias en tu entorno de Python:
+
+```bash
+pip install psycopg2-binary pgvector numpy
 
 ```
