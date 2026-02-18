@@ -142,6 +142,15 @@ Este script hará lo siguiente:
 Primero, necesitas instalar las librerías necesarias en tu entorno de Python:
 
 ```bash
+# Usando UV
+uv init
+uv venv .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+
+# Usando pip
+python -m venv .venv
+source .venv/bin/activate
 pip install psycopg2-binary pgvector numpy
 
 ```
